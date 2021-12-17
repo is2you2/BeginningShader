@@ -11,15 +11,18 @@ varying vec2 tex_position;
 
 render_mode specular_toon;
 
-float height(vec2 position, float time){
-	vec2 offset = .01 * cos(position + time);
-	return texture(noise, (position / 10.0) - offset).x;
-}
-
 float wave(vec2 position){
 	position += texture(noise, position / 10.0).x * 2.0 - 1.0;
 	vec2 wv = 1.0 - abs(sin(position));
 	return pow(1.0 - pow(wv.x * wv.y, .65), 4.0);
+}
+
+float height(vec2 position, float time){
+	float d = wave((position + time) * .4) * .3;
+	d += wave((position - time) * .3) * .3;
+	d += wave((position + time) * .5) * .2;
+	d += wave((position - time) * .6) * .2;
+	return d;
 }
 
 void vertex(){
